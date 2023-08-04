@@ -1,0 +1,27 @@
+*{
+    margin: 0px;
+    padding: 0px;
+}
+
+.p-40{
+    padding: 40px;
+}
+
+.heading{
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    font-size: 2em;
+    margin-bottom: 40px;
+}
+
+.mg-btm{
+    margin-bottom: 20px;
+}
+
+.mg-btm a{
+    background-color: white;
+    padding : 5px 12px;
+    box-shadow: 0px 8px 8px grey;
+    border: 1px solid blue;
+    text-decoration: none;
+
+}
