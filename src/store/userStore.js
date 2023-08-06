@@ -25,7 +25,6 @@ async function createUser(userData) {
   }
 }
 
-// getAllUsers
 async function getAllUsers() {
   const query = "SELECT * FROM users";
   try {
@@ -38,68 +37,56 @@ async function getAllUsers() {
         }
       });
     });
-    return queryResults; ///yanh par res.rnder ki jararu nhi padi kyunki url
-  } catch (err) {
-    console.log(err);
-  }
-}
-
-// get useby ID
-async function getUserById(id) {
-  // const { id } = id;
-  const query = "SELECT * FROM users WHERE id = ?";
-  try {
-    const queryResults = await new Promise((resolve, reject) => {
-      db.query(query, [id], (err, result) => {
-        if (err) {
-          console.log(err);
-        } else {
-          resolve(result);
-        }
-      });
-    });
     return queryResults;
   } catch (err) {
     console.log(err);
   }
 }
 
-// update user
-async function updateUser(userData, id) {
-  const { firstname, lastname, username, email, password } = userData;
-  const query = "UPDATE users SET ? where id=?";
-  const values = [{ firstname, lastname, username, email, password }, id];
-
+async function getUserById(userId) {
+  const query = "SELECT * FROM users WHERE id = ?";
   try {
-    const queryResults = await new Promise((resolve, reject) => {
-      db.query(query, values, (err, result) => {
+    const queryResult = await new Promise((resolve, reject) => {
+      db.query(query, [userId], (err, results) => {
         if (err) {
           reject(err);
         } else {
-          resolve(result);
-          console.log(result);
+          resolve(results);
         }
       });
     });
-    return queryResults;
+    return queryResult;
   } catch (err) {
     console.log(err);
   }
 }
 
-async function deleteUser(id) {
+async function updateUser(userId, updatedUserData) {
+  const query = "UPDATE users SET ? WHERE id = ?";
+  try {
+    const queryResult = await new Promise((resolve, reject) => {
+      db.query(query, [updatedUserData, userId], (err, results) => {
+        if (err) {
+          reject(err);
+        }
+        resolve(results.affectedRows > 0);
+      });
+    });
+    return queryResult;
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+async function deleteUser(userId) {
   const query = "DELETE FROM users WHERE id = ?";
   try {
     const queryResult = await new Promise((resolve, reject) => {
-        db.query(query, id, (err, result) =>{
-          if(err)
-          {
-            reject(err);
-          }else{
-            resolve(result);
-          }
-        })
-    })
+      db.query(query, [userId], (err, results) => {
+        if (err) reject(err);
+        resolve(results.affectedRows > 0);
+      });
+    });
     return queryResult;
   } catch (err) {
     console.log(err);
@@ -111,5 +98,5 @@ module.exports = {
   getAllUsers,
   getUserById,
   updateUser,
-  deleteUser
+  deleteUser,
 };

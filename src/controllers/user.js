@@ -29,15 +29,15 @@ async function getAllUsers(req, res) {
   }
 }
 
-async function getEditForm(req, res) {
-  const { id } = req.params;
+async function getUserById(req, res) {
+  const userId = req.params.id;
+
   try {
-    let user = await userService.getUserById(id);
-    user = user.length > 0 ? user[0] : undefined;
-    if (user !== undefined) {
-      res.render("editForm", { user });
+    const user = await userService.getUserById(userId);
+    if (!user) {
+      res.status(404).json({ error: "User not found" });
     } else {
-      res.send("Page Not Found!");
+      res.json(user);
     }
   } catch (err) {
     console.log(err);
@@ -45,19 +45,12 @@ async function getEditForm(req, res) {
 }
 
 async function updateUser(req, res) {
-  const { id } = req.params;
-  const { firstname, lastname, username, email, password } = req.body;
+  const userId = req.params.id;
+  const updatedUserData = req.body;
+  console.log(updatedUserData);
+
   try {
-    await userService.updateUser(
-      {
-        firstname,
-        lastname,
-        username,
-        email,
-        password,
-      },
-      id
-    );
+    const updatedUser = await userService.updateUser(userId, updatedUserData);
     res.redirect("/index");
   } catch (err) {
     console.log(err);
@@ -65,10 +58,26 @@ async function updateUser(req, res) {
 }
 
 async function deleteUser(req, res) {
-  const { id } = req.params;
+  const userId = req.params.id;
+
   try {
-    const user = await userService.deleteUser(id);
-    res.redirect("/index");
+    const deletedUser = await userService.deleteUser(userId);
+    res.json(deletedUser);
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+async function renderUpdateUserPage(req, res) {
+  const userId = req.params.id;
+  try {
+    const user = await userService.getUserById(userId);
+    const userD = user[0];
+    if (!user) {
+      res.status(404).json({ error: "User not found" });
+    } else {
+      res.render("update-user", { userD });
+    }
   } catch (err) {
     console.log(err);
   }
@@ -77,7 +86,8 @@ async function deleteUser(req, res) {
 module.exports = {
   createUser,
   getAllUsers,
-  getEditForm,
+  getUserById,
   updateUser,
   deleteUser,
+  renderUpdateUserPage,
 };

@@ -45,8 +45,8 @@
               <td><%= users[i].username %></td>
               <td><%= users[i].email %></td>
               <td><%= users[i].password %></td>
-              <td><a href="/users/edit/<%= users[i].id %>"><ion-icon name="pencil-outline" class="text-success"></ion-icon></a></ion-icon>
-                  &nbsp; &nbsp;<a href="/users/delete/<%= users[i].id %>"><ion-icon name="trash-bin" class="text-danger"></ion-icon></td></a>
+              <td><a href="/update-user/<%= users[i].id %>"><ion-icon name="pencil-outline" class="text-success"></ion-icon></a></ion-icon>
+                  &nbsp; &nbsp;<a href="" onclick="deleteUser('<%= users[i].id %>')"><ion-icon name="trash-bin" class="text-danger"></ion-icon></td></a>
             </tr>
             <% }; %>
         </tbody>
@@ -61,4 +61,18 @@
     nomodule
     src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"
   ></script>
+  <script>
+    function deleteUser(userId) {
+      fetch(`/users/${userId}`, {
+        method: 'DELETE',
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
+  </script>
 </html>

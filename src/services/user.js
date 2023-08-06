@@ -1,8 +1,8 @@
-const userCurd = require("../store/userCurd");
+const userStore = require("../store/userStore");
 
 async function createUser(userData) {
   try {
-    const createdUser = await userCurd.createUser(userData);
+    const createdUser = await userStore.createUser(userData);
     return createdUser;
   } catch (error) {
     throw error;
@@ -11,37 +11,45 @@ async function createUser(userData) {
 
 async function getAllUsers() {
   try {
-    const allUsers = await userCurd.getAllUsers();
+    const allUsers = await userStore.getAllUsers();
     return allUsers;
   } catch (error) {
     throw error;
   }
 }
 
-async function getUserById(id) {
+async function getUserById(userId) {
   try {
-    const editedUser = await userCurd.getUserById(id);
-    return editedUser;
+    const user = await userStore.getUserById(userId);
+    return user;
   } catch (err) {
     console.log(err);
   }
 }
 
-async function updateUser(userData, id) {
+async function updateUser(userId, updatedUserData) {
   try {
-    const updatedUser = await userCurd.updateUser(userData, id);
+    const existingUser = await userStore.getUserById(userId);
+    if (!existingUser) {
+      throw new Error("User not found");
+    }
+    const updatedUser = await userStore.updateUser(userId, updatedUserData);
     return updatedUser;
-  } catch (error) {
-    throw error;
+  } catch (err) {
+    console.log(err);
   }
 }
 
-async function deleteUser(id) {
+async function deleteUser(userId) {
   try {
-    const deletedUser = await userCurd.deleteUser(id);
+    const existingUser = await userStore.getUserById(userId);
+    if (!existingUser) {
+      throw new Error("User not found");
+    }
+    const deletedUser = await userStore.deleteUser(userId);
     return deletedUser;
-  } catch (error) {
-    throw error;
+  } catch (err) {
+    console.log(err);
   }
 }
 
