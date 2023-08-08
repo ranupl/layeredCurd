@@ -31,13 +31,13 @@ async function getAllUsers(req, res) {
 
 async function getUserById(req, res) {
   const userId = req.params.id;
-
+  
   try {
     const user = await userService.getUserById(userId);
     if (!user) {
       res.status(404).json({ error: "User not found" });
     } else {
-      res.json(user);
+      res.render("update-user", { user: user[0] });
     }
   } catch (err) {
     console.log(err);
@@ -47,7 +47,6 @@ async function getUserById(req, res) {
 async function updateUser(req, res) {
   const userId = req.params.id;
   const updatedUserData = req.body;
-  console.log(updatedUserData);
 
   try {
     const updatedUser = await userService.updateUser(userId, updatedUserData);
@@ -68,26 +67,10 @@ async function deleteUser(req, res) {
   }
 }
 
-async function renderUpdateUserPage(req, res) {
-  const userId = req.params.id;
-  try {
-    const user = await userService.getUserById(userId);
-    const userD = user[0];
-    if (!user) {
-      res.status(404).json({ error: "User not found" });
-    } else {
-      res.render("update-user", { userD });
-    }
-  } catch (err) {
-    console.log(err);
-  }
-}
-
 module.exports = {
   createUser,
   getAllUsers,
   getUserById,
   updateUser,
   deleteUser,
-  renderUpdateUserPage,
 };

@@ -45,7 +45,7 @@
               <td><%= users[i].username %></td>
               <td><%= users[i].email %></td>
               <td><%= users[i].password %></td>
-              <td><a href="/update-user/<%= users[i].id %>"><ion-icon name="pencil-outline" class="text-success"></ion-icon></a></ion-icon>
+              <td><a href="/users/<%= users[i].id %>"><ion-icon name="pencil-outline" class="text-success"></ion-icon></a></ion-icon>
                   &nbsp; &nbsp;<a href="" onclick="deleteUser('<%= users[i].id %>')"><ion-icon name="trash-bin" class="text-danger"></ion-icon></td></a>
             </tr>
             <% }; %>
